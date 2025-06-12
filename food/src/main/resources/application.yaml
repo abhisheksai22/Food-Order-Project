@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: food-service
+
+# MysQL database configuration
+  datasource:
+    url: jdbc:mysql://localhost:3306/food_order
+    username: root
+    password: 773726
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+#Redis cache configuration
+  cache:
+    type: redis
+    cache-names: foodOrder
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+# Kafka configuration
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: food-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      acks: all
+      retries: 3
+      enable-idempotence: true
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+# Eureka server configuration
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+#actuator settings
+management:
+  endpoints:
+    web:
+      exposure:
+        include: 'prometheus'
+
+server:
+  port: 8083
